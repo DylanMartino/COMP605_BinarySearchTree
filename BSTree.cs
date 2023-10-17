@@ -5,7 +5,7 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lecture_BinarySearchTree
+namespace Assignment3
 {
     internal class BSTree
     {
@@ -18,9 +18,9 @@ namespace Lecture_BinarySearchTree
 
         private void InsertNode(BST_Node tree, BST_Node node)
         {
-            // This is a recursive methos used to traverse the tree
+            // This is a recursive method used to traverse the tree
             // 1. Compare node for less than node in tree
-            if (node.Data < tree.Data)
+            if (node.Length < tree.Length)
             {
                 if (tree.Left == null)
                 {
@@ -35,7 +35,7 @@ namespace Lecture_BinarySearchTree
                 }
             }
             // 4. Compare node for greater than node in tree
-            if (node.Data > tree.Data)
+            if (node.Length > tree.Length)
             {
                 if (tree.Right == null)
                 {
@@ -51,9 +51,9 @@ namespace Lecture_BinarySearchTree
             }
         }
 
-        public void Add(int data)
+        public void Add(string word)
         {
-            BST_Node node = new BST_Node(data);
+            BST_Node node = new BST_Node(word);
 
             if (Root == null)
             {
@@ -72,12 +72,12 @@ namespace Lecture_BinarySearchTree
                 // 1. Reached null side of the tree, return to unload stack
                 return tree;
             }
-            if (node.Data < tree.Data)
+            if (node.Length < tree.Length)
             {
                 // 2. Traverse left side to find node
                 tree.Left = Delete(tree.Left, node);
             }
-            else if (node.Data > tree.Data)
+            else if (node.Length > tree.Length)
             {
                 // 3. Traverse right side to find node
                 tree.Right = Delete(tree.Right, node);
@@ -102,7 +102,7 @@ namespace Lecture_BinarySearchTree
                     // 7. Node has two leaf nodes, get the InOrder successor node
                     // (the smallest), therefore traverse right side and replace the
                     // node found with the current node
-                    tree.Data = MinValue(tree.Right);
+                    tree.Length = MinValue(tree.Right);
 
                     // 8. Traverse the right side of the tree to delete the InOrder Successor
                     tree.Right = Delete(tree.Right, tree);
@@ -114,29 +114,29 @@ namespace Lecture_BinarySearchTree
         private int MinValue(BST_Node node)
         {
             // Finds the minimum node in the rightside of the tree
-            int minval = node.Data;
+            int minval = node.Length;
             while (node.Left != null)
             {
                 // Traverse the tree replacing the minval with the
                 // node on the left side of the tree
-                minval = node.Left.Data;
+                minval = node.Left.Length;
                 node = node.Left;
             }
             return minval;
         }
 
-        public string Remove(int data)
+        public string Remove(string word)
         {
-            BST_Node node = new BST_Node(data);
+            BST_Node node = new BST_Node(word);
             //node = Search(Root, node);
             if (node != null)
             {
                 Root = Delete(Root, node);
-                return "Target: " + data.ToString() + ", NODE removed";
+                return "Target: " + word.ToString() + ", NODE removed";
             }
             else
             {
-                return "Target: " + data.ToString() + ", NODE not found";
+                return "Target: " + word.ToString() + ", NODE not found";
             }
         }
 
@@ -146,12 +146,12 @@ namespace Lecture_BinarySearchTree
             if (tree != null)
             {
                 // 1. Have not reach the end of a branch
-                if (node.Data == tree.Data)
+                if (node.Length == tree.Length)
                 {
                     // 2. Node found
                     return tree;
                 }
-                if (node.Data < tree.Data)
+                if (node.Length < tree.Length)
                 {
                     // 3. Traverse left side
                     return Search(tree.Left, node);
@@ -166,17 +166,17 @@ namespace Lecture_BinarySearchTree
             return null;
         }
 
-        public string Find(int data)
+        public string Find(string word)
         {
-            BST_Node node = new BST_Node(data);
+            BST_Node node = new BST_Node(word);
             node = Search(Root, node);
             if (node != null)
             {
-                return "Target: " + data.ToString() + ", NODE found: " + node.Data.ToString();
+                return "\nWord: " + word.ToString() + " Length: " + word.Length.ToString() + " Found.\n";
             }
             else
             {
-                return "Target: " + data.ToString() + ", NODE not found or Tree Empty: " + node.Data.ToString();
+                return "\nWord: " + word.ToString() + ", not found or Tree is Empty.\n";
             }
         }
         #endregion
