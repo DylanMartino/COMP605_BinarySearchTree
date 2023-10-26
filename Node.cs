@@ -6,26 +6,24 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
-    internal class BST_Node
+    internal class Node
     {
-
         public string Word { get; set; }
 
         public int Length { get; set; }
 
-        public BST_Node Left { get; set; }
+        public Node Left { get; set; }
+        public Node Right { get; set; }
 
-        public BST_Node Right { get; set; }
-
-        public BST_Node()
+        public Node()
         {
-            Left = null;
-            Right = null;
             Word = null;
             Length = 0;
+            Left = null;
+            Right = null;
         }
 
-        public BST_Node(string word)
+        public Node(string word)
         {
             this.Word = word;
             this.Length = word.Length;
@@ -35,7 +33,7 @@ namespace Assignment3
 
         public override string ToString()
         {
-            return Word.Length.ToString(); //string.Format("{0} {1,-10} {2,10} {3}", "Word: ", Word, " Length: ", Length.ToString());
+            return Word.ToString();
         }
     }
 }

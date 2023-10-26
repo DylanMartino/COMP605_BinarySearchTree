@@ -8,17 +8,18 @@ namespace Assignment3
 {
     internal class AVLTree
     {
-        public AVL_Node Root { get; set; }
+        public Node Root { get; set; }
 
         public AVLTree()
         {
             Root = null;
         }
 
-        public void Add(int data)
+        #region INSERT / ADD / BALANCE OPERATIONS
+        public void Add(string word)
         {
             // UI Call
-            AVL_Node node = new AVL_Node(data);
+            Node node = new Node(word);
 
             if (Root == null)
             {
@@ -31,7 +32,7 @@ namespace Assignment3
             }
         }
 
-        private AVL_Node InsertNode(AVL_Node tree, AVL_Node node)
+        private Node InsertNode(Node tree, Node node)
         {
             // 1. Current sub-tree node is empty, insert node here
             if (tree == null)
@@ -39,14 +40,14 @@ namespace Assignment3
                 tree = node;
                 return tree;
             }
-            else if (node.Data < tree.Data)
+            else if (tree.Word.CompareTo(node.Word) < 0)
             {
                 // 2. Traverse left side, insert when null (Step 1.).
                 //    then balance the tree
                 tree.Left = InsertNode(tree.Left, node);
                 tree = BalanceTree(tree);
             }
-            else if (node.Data > tree.Data)
+            else if (tree.Word.CompareTo(node.Word) > 0)
             {
                 // 3. Traverse right side, insert when null (Step 1.),
                 //    then balance the tree
@@ -56,7 +57,7 @@ namespace Assignment3
             return tree;
         }
 
-        private AVL_Node BalanceTree(AVL_Node current)
+        private Node BalanceTree(Node current)
         {
             // 1. Obtain a balance reference from height of both
             //    left and right sub-trees from the current node
@@ -98,49 +99,49 @@ namespace Assignment3
             return current;
         }
 
-        private AVL_Node RotateRR(AVL_Node parent)
+        private Node RotateRR(Node parent)
         {
             // Perform a right rotation on the right side of the sub-tree by
             // swapping the nodes around based on reassigning the parent node
             // to the right side of the sub-tree.
-            AVL_Node pivot = parent.Right;
+            Node pivot = parent.Right;
             parent.Right = pivot.Left;
             pivot.Left = parent;
             return pivot;
         }
 
-        private AVL_Node RotateRL(AVL_Node parent)
+        private Node RotateRL(Node parent)
         {
             // Perform a left rotation on the right side of the sub-tree by
             // swapping the nodes around based on performing a left rotation
             // on the right side of the sub-tree.
-            AVL_Node pivot = parent.Right;
+            Node pivot = parent.Right;
             parent.Right = RotateLL(pivot);
             return RotateRR(parent);
         }
 
-        private AVL_Node RotateLL(AVL_Node parent)
+        private Node RotateLL(Node parent)
         {
             // Perform a left rotation on the left side of the sub-tree by
             // swapping the nodes around based on reassigning the parent node
             // on the left side of the sub-tree.
-            AVL_Node pivot = parent.Left;
+            Node pivot = parent.Left;
             parent.Left = pivot.Right;
             pivot.Right = parent;
             return pivot;
         }
 
-        private AVL_Node RotateLR(AVL_Node parent)
+        private Node RotateLR(Node parent)
         {
             // Perform a right rotation on the left side of the sub-tree by
             // swapping the nodes around based on performing a right rotation
             // on the left side of the sub-tree.
-            AVL_Node pivot = parent.Left;
+            Node pivot = parent.Left;
             parent.Left = RotateRR(pivot);
             return RotateLL(parent);
         }
 
-        private int GetHeight(AVL_Node current)
+        private int GetHeight(Node current)
         {
             // Determine the height of the current sub-tree
             int height = 0;
@@ -154,7 +155,7 @@ namespace Assignment3
             return height;
         }
 
-        private int BalanceFactor(AVL_Node current)
+        private int BalanceFactor(Node current)
         {
             // Determine if the sub-tree needs to rotate left or
             // right by finding the height of the left and right
@@ -171,11 +172,12 @@ namespace Assignment3
             int b_factor = left - right;
             return b_factor;
         }
+        #endregion
 
         #region DELETE OPERATIONS
-        private AVL_Node Delete(AVL_Node current, AVL_Node target)
+        private Node Delete(Node current, Node target)
         {
-            AVL_Node parent = null; // Pivot Node
+            Node parent = null; // Pivot Node
 
             if (current == null)
             {
@@ -184,7 +186,7 @@ namespace Assignment3
             }
             else
             {
-                if (target.Data < current.Data)
+                if (current.Word.CompareTo(target.Word) < 0)
                 {
                     current.Left = Delete(current.Left, target);
                     if (BalanceFactor(current) == -2)
@@ -200,7 +202,7 @@ namespace Assignment3
                         }
                     }
                 }
-                else if (target.Data > current.Data)
+                else if (current.Word.CompareTo(target.Word) > 0)
                 {
                     // Traverse right side of the sub-tree
                     current.Right = Delete(current.Right, target);
@@ -229,7 +231,7 @@ namespace Assignment3
                         {
                             parent = parent.Left;
                         }
-                        current.Data = parent.Data;
+                        current.Word = parent.Word;
                         current.Right = Delete(current.Right, parent);
                         if (BalanceFactor(current) == 2)
                         {
@@ -254,36 +256,34 @@ namespace Assignment3
             return current;
         }
 
-        public string Remove(int data)
+        public string Remove(string word)
         {
-            // UI Method Call
-            AVL_Node node = new AVL_Node(data);
-            node = Search(Root, node); // Optional
-
+            Node node = new Node(word);
+            node = Search(Root, node);
             if (node != null)
             {
                 Root = Delete(Root, node);
-                return "Target: " + data.ToString() + ", NODE removed";
+                return "Word: " + word.ToString() + " Length: " + word.Length.ToString() + ", removed from the AVL tree successfully!\n";
             }
             else
             {
-                return "Target: " + data.ToString() + ", NODE not found or Tree empty";
+                return "Word: " + word.ToString() + ", not found in the tree.\n";
             }
         }
         #endregion
 
-        #region SEARCH / FIND
-        private AVL_Node Search(AVL_Node tree, AVL_Node node)
+        #region SEARCH / FIND OPERATIONS
+        private Node Search(Node tree, Node node)
         {
             if (tree != null)
             {
                 // 1. Have not reach the end of a branch
-                if (node.Data == tree.Data)
+                if (tree.Word.CompareTo(node.Word) == 0)
                 {
                     // 2. Node found
                     return tree;
                 }
-                if (node.Data < tree.Data)
+                if (tree.Word.CompareTo(node.Word) < 0)
                 {
                     // 3. Traverse left side
                     return Search(tree.Left, node);
@@ -298,54 +298,75 @@ namespace Assignment3
             return null;
         }
 
-        public string Find(int data)
+        public string Find(string word)
         {
-            AVL_Node node = new AVL_Node(data);
+            Node node = new Node(word);
             node = Search(Root, node);
             if (node != null)
             {
-                return "Target: " + data.ToString() + ", NODE found: " + node.Data.ToString();
+                return "\nWord: " + word.ToString() + " Length: " + word.Length.ToString() + " Found in the AVL tree.\n";
             }
             else
             {
-                return "Target: " + data.ToString() + ", NODE not found or Tree Empty";
+                return "\nWord: " + word.ToString() + ", not found or the tree is empty.\n";
             }
         }
         #endregion
 
         #region TRAVERSE ORDERS
-        private string TraversePreOrder(AVL_Node node)
+        private string TraversePreOrder(Node node, bool isRoot = false)
         {
             StringBuilder sb = new StringBuilder();
             if (node != null)
             {
-                sb.Append(node.ToString() + " ");
+                if (isRoot)
+                {
+                    sb.Append($"[{node.Word}] "); // Append the root node with brackets
+                }
+                else
+                {
+                    sb.Append(node.Word + " "); // Append other nodes
+                }
                 sb.Append(TraversePreOrder(node.Left));
                 sb.Append(TraversePreOrder(node.Right));
             }
             return sb.ToString();
         }
 
-        private string TraverseInOrder(AVL_Node node)
+        private string TraverseInOrder(Node node, bool isRoot = false)
         {
             StringBuilder sb = new StringBuilder();
             if (node != null)
             {
                 sb.Append(TraverseInOrder(node.Left));
-                sb.Append(node.ToString() + " ");
+                if (isRoot)
+                {
+                    sb.Append($"[{node.Word}] "); // Append the root node with brackets
+                }
+                else
+                {
+                    sb.Append(node.Word + " "); // Append other nodes
+                }
                 sb.Append(TraverseInOrder(node.Right));
             }
             return sb.ToString();
         }
 
-        private string TraversePostOrder(AVL_Node node)
+        private string TraversePostOrder(Node node, bool isRoot = false)
         {
             StringBuilder sb = new StringBuilder();
             if (node != null)
             {
                 sb.Append(TraversePostOrder(node.Left));
                 sb.Append(TraversePostOrder(node.Right));
-                sb.Append(node.ToString() + " ");
+                if (isRoot)
+                {
+                    sb.Append($"[{node.Word}] "); // Append the root node with brackets
+                }
+                else
+                {
+                    sb.Append(node.Word + " "); // Append other nodes
+                }
             }
             return sb.ToString();
         }

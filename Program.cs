@@ -14,25 +14,30 @@ namespace Assignment3
         private static BSTree bsTree = new BSTree();
         static void Main(string[] args)
         {
-        #region --------------------------------------------------------------------------------- [ MENUS / MENU SWITCHES ] ------------------------------------------------
-        #region --------------------------------------------------------------------------------- [ MAIN MENU / SWITCH ] ---------------------------------------------------
+            #region --------------------------------------------------------------------------------- [ MENUS / MENU SWITCHES ] ------------------------------------------------
+            #region --------------------------------------------------------------------------------- [ MAIN MENU / SWITCH ] ---------------------------------------------------
             while (true)
             {
                 int opt = MainMenu();
                 switch (opt)
                 {
-                    // Read Files into Dictionary Menu
+                    // Read Files Menu
                     case 1:
                         Console.Clear();
-                        ReadIntoDictionarySwitch();
+                        ReadFilesSwitch();
                         break;
-                    // Sorting Algorithms Menu
+                    // Binary Search Tree Menu
                     case 2:
                         Console.Clear();
                         BSTSwitch();
                         break;
-                    // Exit Console Program
+                    // Balanced Search Tree Menu
                     case 3:
+                        Console.Clear();
+                        AVLSwitch();
+                        break;
+                    // Exit Console Program
+                    case 4:
                         Console.Clear();
                         return;
                     default:
@@ -45,13 +50,14 @@ namespace Assignment3
         private static int MainMenu()
         {
             int opt = 0;
-            while (opt < 1 || opt > 3)
+            while (opt < 1 || opt > 4)
             {
                 Console.WriteLine("******************* [ Main Menu ] ********************");
                 Console.WriteLine("*                                                    *");
                 Console.WriteLine("*              1 - Reading Files Menu                *");
-                Console.WriteLine("*              2 - DLL Operations Menu               *");
-                Console.WriteLine("*              3 - Exit                              *");
+                Console.WriteLine("*              2 - Binary Search Tree Menu           *");
+                Console.WriteLine("*              3 - Balanced Search Tree Menu         *");
+                Console.WriteLine("*              4 - Exit                              *");
                 Console.WriteLine("*                                                    *");
                 Console.WriteLine("******************************************************");
                 Console.WriteLine();
@@ -64,11 +70,11 @@ namespace Assignment3
         #endregion
 
         #region --------------------------------------------------------------------------------- [ READING DICTIONARY MENU / SWITCH ] -------------------------------------
-        private static void ReadIntoDictionarySwitch() // Reading List
+        private static void ReadFilesSwitch() // Reading List
         {
             while (true)
             {
-                int opt = ReadIntoDictionaryMenu();
+                int opt = ReadFilesMenu();
                 switch (opt)
                 {
                     case 1:
@@ -78,7 +84,7 @@ namespace Assignment3
                         ReadingRandomFiles(); // Read Random List
                         break;
                     case 3:
-                        PrintBST(); // Print BST
+                        PrintTree(); // Print a Tree from Selection
                         break;
                     case 4:
                         // Return to the main menu
@@ -91,7 +97,7 @@ namespace Assignment3
             }
         }
 
-        private static int ReadIntoDictionaryMenu() // Reading List Files
+        private static int ReadFilesMenu() // Reading List Files
         {
             int opt = 0;
             while (opt < 1 || opt > 4)
@@ -100,7 +106,7 @@ namespace Assignment3
                 Console.WriteLine("*                                                    *");
                 Console.WriteLine("*                  1 - Ordered List                  *");
                 Console.WriteLine("*                  2 - Random List                   *");
-                Console.WriteLine("*                  3 - Print DLL                     *");
+                Console.WriteLine("*                  3 - Print                         *");
                 Console.WriteLine("*                  4 - Exit                          *");
                 Console.WriteLine("*                                                    *");
                 Console.WriteLine("******************************************************");
@@ -113,7 +119,7 @@ namespace Assignment3
         }
         #endregion
 
-        #region --------------------------------------------------------------------------------- [ BINARY SEARCH TREE MENU / SWITCH ] -----------------------------------
+        #region --------------------------------------------------------------------------------- [ BINARY SEARCH TREE MENU / SWITCH ] -------------------------------------
         private static void BSTSwitch() // Binary Seach Tree Menu
         {
             while (true)
@@ -123,16 +129,20 @@ namespace Assignment3
                 {
                     case 1:
                         Console.Clear();
-                        DLLInsertMenuSwitch(); // Insert Submenu
+                        InsertOp_BST(); // Insert Word
                         break;
-                    case 2:
+                    case 2: // Find Word
                         Console.Clear();
                         FindOp();
                         break;
-                    case 3:
-                        PrintBST(); // Print BST
+                    case 3: // Delete Word
+                        Console.Clear();
+                        DeleteOp();
                         break;
                     case 4:
+                        PrintBST(); // Print BST
+                        break;
+                    case 5:
                         Console.Clear();
                         return;
                     default:
@@ -145,74 +155,15 @@ namespace Assignment3
         private static int BSTMenu()
         {
             int opt = 0;
-            while (opt < 1 || opt > 4)
+            while (opt < 1 || opt > 5)
             {
                 Console.WriteLine("************ [ Binary Search Tree Menu ] *************");
                 Console.WriteLine("*                                                    *");
-                Console.WriteLine("*               1 - Insertion Menu                   *");
+                Console.WriteLine("*               1 - Insert Word                      *");
                 Console.WriteLine("*               2 - Find Word                        *");
-                Console.WriteLine("*               3 - Print BST                        *");
-                Console.WriteLine("*               4 - Main Menu                        *");
-                Console.WriteLine("*                                                    *");
-                Console.WriteLine("******************************************************");
-                Console.WriteLine();
-                Console.WriteLine("Enter an Option: ");
-
-                opt = int.Parse(Console.ReadLine());
-            }
-            return opt;
-        }
-
-        #region INSERT SUBMENU / SWITCH
-        private static void DLLInsertMenuSwitch() // Insert Menu Switch
-        {
-            while (true)
-            {
-                int opt = DLLInsertMenu();
-                switch (opt)
-                {
-                    case 1:
-                        //InsertToFront(); // Add New Word before Target
-                        break;
-                    case 2:
-                        //InsertToRear(); // Add New Word after Target
-                        break;
-                    case 3:
-                        //InsertBeforeNode(); // Add New Word before Target
-                        break;
-                    case 4:
-                        //InsertAfterNode(); // Add New Word after Target
-                        break;
-                    case 5:
-                        //FindWord(); // Find a Word
-                        break;
-                    case 6:
-                        //PrintDLL(); // Print
-                        break;
-                    case 7:
-                        Console.Clear();
-                        return;
-                    default:
-                        Console.WriteLine("Invalid Input.");
-                        break;
-                }
-            }
-        }
-
-        private static int DLLInsertMenu()
-        {
-            int opt = 0;
-            while (opt < 1 || opt > 7)
-            {
-                Console.WriteLine("***************** [ Insertion Menu ] *****************");
-                Console.WriteLine("*                                                    *");
-                Console.WriteLine("*               1 - Add Word To Front                *");
-                Console.WriteLine("*               2 - Add Word To Rear                 *");
-                Console.WriteLine("*               3 - Add Word Before                  *");
-                Console.WriteLine("*               4 - Add Word After                   *");
-                Console.WriteLine("*               5 - Find a Word                      *");
-                Console.WriteLine("*               6 - Print DLL                        *");
-                Console.WriteLine("*               7 - Back                             *");
+                Console.WriteLine("*               3 - Delete Word                      *");
+                Console.WriteLine("*               4 - Print BST                        *");
+                Console.WriteLine("*               5 - Main Menu                        *");
                 Console.WriteLine("*                                                    *");
                 Console.WriteLine("******************************************************");
                 Console.WriteLine();
@@ -224,30 +175,28 @@ namespace Assignment3
         }
         #endregion
 
-        #region DELETE SUBMENU / SWITCH
-        private static void DLLDeleteMenuSwitch() // Delete Menu Switch
+        #region --------------------------------------------------------------------------------- [ BALANCED SEARCH TREE MENU / SWITCH ] -----------------------------------
+        private static void AVLSwitch() // Balanced Seach Tree Menu
         {
             while (true)
             {
-                int opt = DLLDeleteMenu();
+                int opt = AVLMenu();
                 switch (opt)
                 {
                     case 1:
-                        //DeleteFromFront(); // Remove from Front
+                        InsertOp_AVL(); // Insert Word
                         break;
                     case 2:
-                        //DeleteFromRear(); // Remove from Rear
+                        Console.Clear();
+                        FindOp(); // Find Word
                         break;
                     case 3:
-                        //DeleteWord(); // Delete a Word
+                        DeleteOp(); // Delete Word
                         break;
                     case 4:
-                        //FindWord(); // Find a Word
+                        PrintAVL(); // Print AVL
                         break;
                     case 5:
-                        //PrintDLL(); // Print
-                        break;
-                    case 6:
                         Console.Clear();
                         return;
                     default:
@@ -257,19 +206,18 @@ namespace Assignment3
             }
         }
 
-        private static int DLLDeleteMenu()
+        private static int AVLMenu()
         {
             int opt = 0;
-            while (opt < 1 || opt > 6)
+            while (opt < 1 || opt > 5)
             {
-                Console.WriteLine("***************** [ Deletion Menu ] ******************");
+                Console.WriteLine("*********** [ Balanced Search Tree Menu ] ************");
                 Console.WriteLine("*                                                    *");
-                Console.WriteLine("*               1 - Delete From Front                *");
-                Console.WriteLine("*               2 - Delete From Rear                 *");
-                Console.WriteLine("*               3 - Delete a Word                    *");
-                Console.WriteLine("*               4 - Find a Word                      *");
-                Console.WriteLine("*               5 - Print DLL                        *");
-                Console.WriteLine("*               6 - Back                             *");
+                Console.WriteLine("*               1 - Insert Word                      *");
+                Console.WriteLine("*               2 - Find Word                        *");
+                Console.WriteLine("*               3 - Delete Word                      *");
+                Console.WriteLine("*               4 - Print AVL                        *");
+                Console.WriteLine("*               5 - Main Menu                        *");
                 Console.WriteLine("*                                                    *");
                 Console.WriteLine("******************************************************");
                 Console.WriteLine();
@@ -279,7 +227,7 @@ namespace Assignment3
             }
             return opt;
         }
-        #endregion
+
         #endregion
         #endregion
 
@@ -357,7 +305,10 @@ namespace Assignment3
                 if (word.Contains("#"))
                     continue;
                 if (word.Contains(word))
-                bsTree.Add(word);
+                {
+                    bsTree.Add(word);
+                    avlTree.Add(word);
+                }
             }
             sw.Stop();
             Console.WriteLine();
@@ -438,8 +389,11 @@ namespace Assignment3
             {
                 if (word.Contains("#"))
                     continue;
-                if (word.Contains(word)) ;
-                //dLList.AddToRear(word); TODO
+                if (word.Contains(word))
+                {
+                    bsTree.Add(word);
+                    avlTree.Add(word);
+                }
             }
             sw.Stop();
             Console.WriteLine();
@@ -451,16 +405,145 @@ namespace Assignment3
         }
         #endregion
 
-        #region FIND OPERATION
-        static void FindOp()
+        #region --------------------------------------------------------------------------------- [ INSERT OPERATION ] -------------------------------
+        static void InsertOp_BST()
         {
             Console.Clear();
-            Console.WriteLine("Enter the Word you'd like to find: ");
-            Console.WriteLine(bsTree.Find(Console.ReadLine()));
+            Console.WriteLine("Enter the word you'd like to add: ");
+            string word = UserInput();
+
+            if (Contains(bsTree.Root, word))
+            {
+                Console.WriteLine("\nWord: " + word + " already exists in the BST. Insertion failed.\n");
+            }
+            else
+            {
+                bsTree.Add(word);
+                Console.WriteLine("\nWord: " + word + " Length: " + word.Length + " inserted into the BST successfully.\n");
+            }
+        }
+
+        static void InsertOp_AVL()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the word you'd like to add: ");
+            string word = UserInput();
+
+            if (Contains(avlTree.Root, word))
+            {
+                Console.WriteLine("\nWord: " + word + " already exists in the AVL. Insertion failed.\n");
+            }
+            else
+            {
+                bsTree.Add(word);
+                Console.WriteLine("\nWord: " + word + " Length: " + word.Length + " inserted into the AVL tree successfully.\n");
+            }
+        }
+
+        static string UserInput() // Validate users word input
+        {
+            // Read the input from the user.
+            string word = Console.ReadLine();
+
+            // Iterate over the input string and check if each character is a letter A-Z.
+            foreach (char character in word)
+            {
+                if (!char.IsLetter(character))
+                {
+                    // Display an error message to the user and ask them to try again.
+                    Console.WriteLine("\n" + word + " is invalid. Please enter only letters A-Z.\n");
+                    return UserInput();
+                }
+            }
+            // Return the input string.
+            return word;
+        }
+
+        static bool Contains(Node tree, string word)
+        {
+            if (tree == null)
+                return false;
+
+            int comparison = string.Compare(word, tree.Word);
+
+            if (comparison < 0)
+                return Contains(tree.Left, word);
+            else if (comparison > 0)
+                return Contains(tree.Right, word);
+            else
+                return true; // Word found in the tree
         }
         #endregion
 
-        #region --------------------------------------------------------------------------------- [ PRINT METHODS ] ----------------------------------
+        #region --------------------------------------------------------------------------------- [ FIND OPERATION ] ---------------------------------
+        static void FindOp()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the word you'd like to find: ");
+            string wordToFind = Console.ReadLine();
+
+            Console.WriteLine("Select the tree to search: ");
+            Console.WriteLine("1. Binary Search Tree");
+            Console.WriteLine("2. Balanced Search Tree");
+
+            int choice;
+            if (int.TryParse(Console.ReadLine(), out choice))
+            {
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine(bsTree.Find(wordToFind));
+                        break;
+                    case 2:
+                        Console.WriteLine(avlTree.Find(wordToFind));
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select 1 or 2.");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a number ( 1 , 2 ).");
+            }
+        }
+        #endregion
+
+        #region --------------------------------------------------------------------------------- [ DELETE OPERATION ] -------------------------------
+        static void DeleteOp()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the word you'd like to delete: ");
+            string wordToDelete = Console.ReadLine();
+
+            Console.WriteLine("Select the tree to delete from: ");
+            Console.WriteLine("1. Binary Search Tree");
+            Console.WriteLine("2. Balanced Search Tree");
+
+            int choice;
+            if (int.TryParse(Console.ReadLine(), out choice))
+            {
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine(bsTree.Remove(wordToDelete));
+                        break;
+                    case 2:
+                        Console.WriteLine(avlTree.Remove(wordToDelete));
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select 1 or 2.");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a number ( 1 , 2 ).");
+            }
+        }
+        #endregion
+
+        #region --------------------------------------------------------------------------------- [ PRINT OPERATIONS ] -------------------------------
         static void PrintBST() // Print the Binary Search Tree ( BST )
         {
             Console.Clear();
@@ -506,6 +589,82 @@ namespace Assignment3
             else
             {
                 Console.WriteLine("Invalid input. Please enter a valid option (1, 2, or 3).\n");
+            }
+        }
+
+        static void PrintAVL() // Print the Balanced Search Tree ( AVL )
+        {
+            Console.Clear();
+            Console.WriteLine("Select an option:");
+            Console.WriteLine("1. Print Pre-order");
+            Console.WriteLine("2. Print In-order");
+            Console.WriteLine("3. Print Post-order");
+
+            int opt;
+            if (int.TryParse(Console.ReadLine(), out opt))
+            {
+                switch (opt)
+                {
+                    case 1: // Print Pre-Order
+                        Console.WriteLine("Pre-order traversal:");
+                        Console.WriteLine(avlTree.PreOrder());
+
+                        Console.WriteLine("\nPress any key to continue...");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    case 2: // Print In-Order
+                        Console.WriteLine("In-order traversal:");
+                        Console.WriteLine(avlTree.InOrder());
+
+                        Console.WriteLine("\nPress any key to continue...");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    case 3: // Print Post-Order
+                        Console.WriteLine("Post-order traversal:");
+                        Console.WriteLine(avlTree.PostOrder());
+
+                        Console.WriteLine("\nPress any key to continue...");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select 1, 2, or 3.\n");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid option (1, 2, or 3).\n");
+            }
+        }
+
+        static void PrintTree()
+        {
+            Console.WriteLine("Select the tree to print:");
+            Console.WriteLine("1. Binary Search Tree (BST)");
+            Console.WriteLine("2. AVL Tree");
+
+            int opt;
+            if (int.TryParse(Console.ReadLine(), out opt))
+            {
+                switch (opt)
+                {
+                    case 1:
+                        PrintBST();
+                        break;
+                    case 2:
+                        PrintAVL();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select 1 or 2.");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a number.");
             }
         }
         #endregion

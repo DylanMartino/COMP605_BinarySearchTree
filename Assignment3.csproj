@@ -45,8 +45,7 @@
   <ItemGroup>
     <Compile Include="AVLTree.cs" />
     <Compile Include="BSTree.cs" />
-    <Compile Include="AVL_Node.cs" />
-    <Compile Include="BST_Node.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

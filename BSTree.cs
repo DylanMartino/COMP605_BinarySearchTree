@@ -9,18 +9,19 @@ namespace Assignment3
 {
     internal class BSTree
     {
-        public BST_Node Root { get; set; }
+        public Node Root { get; set; }
 
         public BSTree()
         {
             Root = null;
         }
 
-        private void InsertNode(BST_Node tree, BST_Node node)
+        #region INSERT / ADD OPERATIONS
+        private void InsertNode(Node tree, Node node)
         {
             // This is a recursive method used to traverse the tree
             // 1. Compare node for less than node in tree
-            if (node.Length < tree.Length)
+            if (tree.Word.CompareTo(node.Word) < 0)
             {
                 if (tree.Left == null)
                 {
@@ -35,7 +36,7 @@ namespace Assignment3
                 }
             }
             // 4. Compare node for greater than node in tree
-            if (node.Length > tree.Length)
+            if (tree.Word.CompareTo(node.Word) > 0)
             {
                 if (tree.Right == null)
                 {
@@ -53,7 +54,7 @@ namespace Assignment3
 
         public void Add(string word)
         {
-            BST_Node node = new BST_Node(word);
+            Node node = new Node(word);
 
             if (Root == null)
             {
@@ -65,19 +66,35 @@ namespace Assignment3
             }
         }
 
-        private BST_Node Delete(BST_Node tree, BST_Node node)
+        private int MinValue(Node node)
+        {
+            // Finds the minimum node in the rightside of the tree
+            int minval = node.Word.Length;
+            while (node.Left != null)
+            {
+                // Traverse the tree replacing the minval with the
+                // node on the left side of the tree
+                minval = node.Left.Length;
+                node = node.Left;
+            }
+            return minval;
+        }
+        #endregion
+
+        #region DELETE OPERATIONS
+        private Node Delete(Node tree, Node node)
         {
             if (tree == null)
             {
                 // 1. Reached null side of the tree, return to unload stack
                 return tree;
             }
-            if (node.Length < tree.Length)
+            if (tree.Word.CompareTo(node.Word) < 0)
             {
                 // 2. Traverse left side to find node
                 tree.Left = Delete(tree.Left, node);
             }
-            else if (node.Length > tree.Length)
+            else if (tree.Word.CompareTo(node.Word) > 0)
             {
                 // 3. Traverse right side to find node
                 tree.Right = Delete(tree.Right, node);
@@ -111,47 +128,34 @@ namespace Assignment3
             return tree;
         }
 
-        private int MinValue(BST_Node node)
-        {
-            // Finds the minimum node in the rightside of the tree
-            int minval = node.Length;
-            while (node.Left != null)
-            {
-                // Traverse the tree replacing the minval with the
-                // node on the left side of the tree
-                minval = node.Left.Length;
-                node = node.Left;
-            }
-            return minval;
-        }
-
         public string Remove(string word)
         {
-            BST_Node node = new BST_Node(word);
-            //node = Search(Root, node);
+            Node node = new Node(word);
+            node = Search(Root, node);
             if (node != null)
             {
                 Root = Delete(Root, node);
-                return "Target: " + word.ToString() + ", NODE removed";
+                return "Word: " + word.ToString() + " Length: " + word.Length.ToString() + ", removed from the BSTree successfully!\n";
             }
             else
             {
-                return "Target: " + word.ToString() + ", NODE not found";
+                return "Word: " + word.ToString() + ", not found in the tree.\n";
             }
         }
+        #endregion
 
-        #region SEARCH / FIND
-        private BST_Node Search(BST_Node tree, BST_Node node)
+        #region SEARCH / FIND OPERATIONS
+        private Node Search(Node tree, Node node)
         {
             if (tree != null)
             {
                 // 1. Have not reach the end of a branch
-                if (node.Length == tree.Length)
+                if (tree.Word.CompareTo(node.Word) == 0)
                 {
                     // 2. Node found
                     return tree;
                 }
-                if (node.Length < tree.Length)
+                if (tree.Word.CompareTo(node.Word) < 0)
                 {
                     // 3. Traverse left side
                     return Search(tree.Left, node);
@@ -168,52 +172,75 @@ namespace Assignment3
 
         public string Find(string word)
         {
-            BST_Node node = new BST_Node(word);
+            Node node = new Node(word);
             node = Search(Root, node);
             if (node != null)
             {
-                return "\nWord: " + word.ToString() + " Length: " + word.Length.ToString() + " Found.\n";
+                return "\nWord: " + word.ToString() + " Length: " + word.Length.ToString() + " Found in the BS Tree.\n";
             }
             else
             {
-                return "\nWord: " + word.ToString() + ", not found or Tree is Empty.\n";
+                return "\nWord: " + word.ToString() + ", not found or the tree is empty.\n";
             }
         }
         #endregion
 
         #region TRAVERSE ORDERS
-        private string TraversePreOrder(BST_Node node)
+        private string TraversePreOrder(Node node, bool isRoot = false)
         {
             StringBuilder sb = new StringBuilder();
             if (node != null)
             {
-                sb.Append(node.ToString() + " ");
+                if (isRoot)
+                {
+                    sb.Append($"[{node.Word}] "); // Append the root node with brackets
+                }
+                else
+                {
+                    sb.Append(node.Word + " "); // Append other nodes
+                }
                 sb.Append(TraversePreOrder(node.Left));
                 sb.Append(TraversePreOrder(node.Right));
             }
             return sb.ToString();
         }
 
-        private string TraverseInOrder(BST_Node node)
+        private string TraverseInOrder(Node node, bool isRoot = false)
         {
             StringBuilder sb = new StringBuilder();
             if (node != null)
             {
                 sb.Append(TraverseInOrder(node.Left));
-                sb.Append(node.ToString() + " ");
+                if (isRoot)
+                {
+                    sb.Append($"[{node.Word}] "); // Append the root node with brackets
+                }
+                else
+                {
+                    sb.Append(node.Word + " "); // Append other nodes
+                }
                 sb.Append(TraverseInOrder(node.Right));
             }
             return sb.ToString();
         }
 
-        private string TraversePostOrder(BST_Node node)
+        private string TraversePostOrder(Node node, bool isRoot = false)
         {
             StringBuilder sb = new StringBuilder();
             if (node != null)
             {
                 sb.Append(TraversePostOrder(node.Left));
                 sb.Append(TraversePostOrder(node.Right));
-                sb.Append(node.ToString() + " ");
+                if (isRoot)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    sb.Append($"[{node.Word}] "); // Append the root node with brackets
+                    Console.ResetColor();
+                }
+                else
+                {
+                    sb.Append(node.Word + " "); // Append other nodes
+                }
             }
             return sb.ToString();
         }
@@ -227,7 +254,7 @@ namespace Assignment3
             }
             else
             {
-                sb.Append(TraversePreOrder(Root));
+                sb.Append(TraversePreOrder(Root, true));
             }
             return sb.ToString();
         }
@@ -241,7 +268,7 @@ namespace Assignment3
             }
             else
             {
-                sb.Append(TraverseInOrder(Root));
+                sb.Append(TraverseInOrder(Root, true));
             }
             return sb.ToString();
         }
@@ -255,7 +282,7 @@ namespace Assignment3
             }
             else
             {
-                sb.Append(TraversePostOrder(Root));
+                sb.Append(TraversePostOrder(Root, true));
             }
             return sb.ToString();
         }
